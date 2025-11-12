@@ -12,7 +12,7 @@ function App() {
       <NoteState>
         <Router>
           <Navbar />
-          <Alert message="Reactjs" />
+          {/* <Alert message="Reactjs" /> */}
           <div className='container'>
             <Routes>
               <Route exact path="/" element={<Home />} />

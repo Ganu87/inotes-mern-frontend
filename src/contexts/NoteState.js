@@ -21,7 +21,7 @@ const NoteState = (props) => {
         });
 
         const jsonData= await response.json();
-        setNotes(jsonData);
+        setNotes(jsonData.data);
     }
 
     //Add note
@@ -38,17 +38,9 @@ const NoteState = (props) => {
 
         });
 
-        const note = {
-            "_id": "6912c1a8a3f30e6ace48f026",
-            "user": "690f1231dd7531a734a1e2cc",
-            "title": title,
-            "description": description,
-            "tag": tag,
-            "date": "2025-11-11T04:55:04.680Z",
-            "__v": 0
-        }
-
-        setNotes(notes.concat(note));
+        
+        //setNotes(notes);
+        await getAllNotes();
     }
     //Edit note
     const editNote = async (id, title, description, tag) => {
@@ -59,24 +51,25 @@ const NoteState = (props) => {
                 "Content-Type": "application/json",
                 "auth-token": authToken
             },
-            body: JSON.stringify(title, description, tag),
+            body: JSON.stringify({title, description, tag}),
 
         });
 
+        let newNotes = JSON.parse(JSON.stringify(notes));
 
-
-        for (let index = 0; index < notes.length; index++) {
-            const element = notes[index];
+        for (let index = 0; index < newNotes.length; index++) {
+            const element = newNotes[index];
 
             if (element._id === id) {
-                element.title = title;
-                element.description = description;
-                element.tag = tag;
-
-
+                newNotes[index].title = title;
+                newNotes[index].description = description;
+                newNotes[index].tag = tag;
+                break;
             }
 
         }
+
+        setNotes(newNotes);
     }
 
     //Delete note
@@ -92,8 +85,9 @@ const NoteState = (props) => {
             body: JSON.stringify({}),
 
         });
-
-        const newNotes = notes.filter((note) => { return note._id !== id })
+        //console.log("notes.data  ",notes);
+        const newNotes = notes && notes.filter((note) => { return note._id !== id })
+        //console.log("newNotes ",newNotes);
         setNotes(newNotes);
     }
 
