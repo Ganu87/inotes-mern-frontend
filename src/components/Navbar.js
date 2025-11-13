@@ -1,11 +1,18 @@
 import React from 'react'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 const Navbar = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.removeItem("auth-token");
+        navigate("/login");
+    }
+
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div className="container-fluid">
-                   
+
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
@@ -16,10 +23,12 @@ const Navbar = () => {
                             </li>
 
                         </ul>
-                        <form className="d-flex" role="search">
-                            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                            <button className="btn btn-outline-success" type="submit">Search</button>
-                        </form>
+                        { !localStorage.getItem("auth-token")?<form className="d-flex">
+                            <Link className='btn btn-primary mx-2' to="/login" role='button'>Login</Link>
+                            <Link className='btn btn-primary mx-2' to="/signup" role='button'>SignUp</Link></form>
+                            :<button className='btn btn-primary mx-2' onClick={handleLogout}>Logout</button>
+                        
+                        }
                     </div>
                 </div>
             </nav>
